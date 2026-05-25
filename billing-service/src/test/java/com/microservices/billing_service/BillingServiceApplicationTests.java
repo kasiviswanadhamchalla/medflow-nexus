@@ -1,10 +1,10 @@
-package com.microservices.config;
+package com.microservices.billing_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ConfigApplicationTests {
+class BillingServiceApplicationTests {
 
 //	@Test
 //	void contextLoads() {

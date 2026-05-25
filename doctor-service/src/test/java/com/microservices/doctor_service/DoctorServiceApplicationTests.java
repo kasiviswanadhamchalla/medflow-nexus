@@ -1,10 +1,10 @@
-package com.microservices.config;
+package com.microservices.doctor_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ConfigApplicationTests {
+class DoctorServiceApplicationTests {
 
 //	@Test
 //	void contextLoads() {
