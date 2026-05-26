@@ -31,7 +31,19 @@
 		<java.version>17</java.version>
 		<org.mapstruct.version>1.6.0</org.mapstruct.version>
 		<lombok.version>1.18.46</lombok.version>
+		<spring-boot.version>3.4.0</spring-boot.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-aop</artifactId>
+				<version>${spring-boot.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
