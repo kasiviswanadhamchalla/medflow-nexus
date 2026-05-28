@@ -1,6 +1,8 @@
 HELP.md
 CLAUDE.md
 GEMINI.md
+MEDFLOW_ARCHITECTURE.md
+medflow_nexus_postman_collection.json
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

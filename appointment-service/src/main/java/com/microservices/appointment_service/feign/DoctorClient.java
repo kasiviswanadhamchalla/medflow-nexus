@@ -9,4 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface DoctorClient {
     @GetMapping("/api/v1/doctors/{id}")
     DoctorResponse getDoctorById(@PathVariable("id") Long id);
+
+    @GetMapping("/api/v1/doctors/{id}/check-availability")
+    Boolean checkAvailability(
+            @PathVariable("id") Long id,
+            @org.springframework.web.bind.annotation.RequestParam("date") @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date,
+            @org.springframework.web.bind.annotation.RequestParam("time") @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.TIME) java.time.LocalTime time);
 }

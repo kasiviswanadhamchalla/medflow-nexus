@@ -16,7 +16,7 @@ import java.util.Date;
 @Slf4j
 public class JwtUtils {
 
-    @Value("${medflow.jwt.secret:medflow-secret-key-2024-medflow-secret-key-2024}")
+    @Value("${medflow.jwt.secret:medflow-secret-key-2024-medflow-secret-key-2024-medflow-secret-key-2024}")
     private String jwtSecret;
 
     @Value("${medflow.jwt.expirationMs:3600000}")
@@ -24,18 +24,21 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+        String role = userPrincipal.getAuthorities().iterator().next().getAuthority();
 
         return Jwts.builder()
                 .subject((userPrincipal.getUsername()))
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), Jwts.SIG.HS256)
                 .compact();
     }
 
-    public String generateTokenFromUsername(String username) {
+    public String generateTokenFromUsername(String username, String role) {
         return Jwts.builder()
                 .subject(username)
+                .claim("role", role)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key(), Jwts.SIG.HS256)
@@ -43,7 +46,7 @@ public class JwtUtils {
     }
 
     private SecretKey key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8));
     }
 
     public String getUserNameFromJwtToken(String token) {

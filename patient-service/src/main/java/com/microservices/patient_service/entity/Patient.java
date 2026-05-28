@@ -34,4 +34,7 @@ public class Patient {
 
     @Column(nullable = false, unique = true)
     private Long userId;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<MedicalHistory> medicalHistories;
 }
