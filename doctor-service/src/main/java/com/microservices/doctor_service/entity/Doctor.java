@@ -35,4 +35,10 @@ public class Doctor {
     private String department;
 
     private boolean available = true;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Availability> availabilities;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<LeaveSchedule> leaveSchedules;
 }

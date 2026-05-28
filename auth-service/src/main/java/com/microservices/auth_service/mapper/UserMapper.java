@@ -14,14 +14,13 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "roles", source = "roles", qualifiedByName = "mapRoles")
+    @Mapping(target = "role", source = "role", qualifiedByName = "mapRole")
     UserResponse toResponse(User user);
 
-    @Named("mapRoles")
-    default List<String> mapRoles(Set<Role> roles) {
-        return roles.stream()
-                .map(role -> role.getName().name())
-                .collect(Collectors.toList());
+    @Named("mapRole")
+    default String mapRole(Role role) {
+        if (role == null) return null;
+        return role.getName().name();
     }
 
     List<UserResponse> toResponseList(List<User> users);

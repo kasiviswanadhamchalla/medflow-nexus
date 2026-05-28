@@ -1,0 +1,57 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: auth-service
+              uri: lb://auth-service
+              predicates:
+                - Path=/api/v1/auth/**
+            - id: patient-service
+              uri: lb://patient-service
+              predicates:
+                - Path=/api/v1/patients/**
+            - id: doctor-service
+              uri: lb://doctor-service
+              predicates:
+                - Path=/api/v1/doctors/**
+            - id: appointment-service
+              uri: lb://appointment-service
+              predicates:
+                - Path=/api/v1/appointments/**
+            - id: billing-service
+              uri: lb://billing-service
+              predicates:
+                - Path=/api/v1/billing/**
+            - id: report-service
+              uri: lb://report-service
+              predicates:
+                - Path=/api/v1/reports/**
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+    instances:
+      authService:
+        baseConfig: default
+      patientService:
+        baseConfig: default
+      doctorService:
+        baseConfig: default
+      appointmentService:
+        baseConfig: default
+      billingService:
+        baseConfig: default
+      reportService:
+        baseConfig: default

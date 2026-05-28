@@ -59,37 +59,32 @@ public class AuthServiceImpl implements AuthService {
                 .email(registerRequest.getEmail())
                 .password(encoder.encode(registerRequest.getPassword()))
                 .enabled(true)
+                .approved(true)
                 .build();
 
-        Set<String> strRoles = registerRequest.getRoles();
-        Set<Role> roles = new HashSet<>();
+        String strRole = registerRequest.getRole();
+        Role role;
 
-        if (strRoles == null || strRoles.isEmpty()) {
-            Role patientRole = roleRepository.findByName(ERole.PATIENT)
+        if (strRole == null || strRole.isEmpty()) {
+            role = roleRepository.findByName(ERole.PATIENT)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(patientRole);
         } else {
-            strRoles.forEach(role -> {
-                switch (role.toLowerCase()) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    case "doctor":
-                        Role doctorRole = roleRepository.findByName(ERole.DOCTOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(doctorRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.PATIENT)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
+            switch (strRole.toLowerCase()) {
+                case "admin":
+                    role = roleRepository.findByName(ERole.ADMIN)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    break;
+                case "doctor":
+                    role = roleRepository.findByName(ERole.DOCTOR)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    break;
+                default:
+                    role = roleRepository.findByName(ERole.PATIENT)
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            }
         }
 
-        user.setRoles(roles);
+        user.setRole(role);
         userRepository.save(user);
 
         return new MessageResponse("User registered successfully!");
@@ -104,9 +99,7 @@ public class AuthServiceImpl implements AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+        String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
 
@@ -116,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
                 .id(userDetails.getId())
                 .username(userDetails.getUsername())
                 .email(userDetails.getEmail())
-                .roles(roles)
+                .role(role)
                 .type("Bearer")
                 .build();
     }
@@ -129,14 +122,15 @@ public class AuthServiceImpl implements AuthService {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUser)
                 .map(user -> {
-                    String token = jwtUtils.generateTokenFromUsername(user.getUsername());
+                    String roleName = user.getRole().getName().name();
+                    String token = jwtUtils.generateTokenFromUsername(user.getUsername(), roleName);
                     return AuthResponse.builder()
                             .token(token)
                             .refreshToken(requestRefreshToken)
                             .id(user.getId())
                             .username(user.getUsername())
                             .email(user.getEmail())
-                            .roles(user.getRoles().stream().map(role -> role.getName().name()).collect(Collectors.toList()))
+                            .role(roleName)
                             .type("Bearer")
                             .build();
                 })

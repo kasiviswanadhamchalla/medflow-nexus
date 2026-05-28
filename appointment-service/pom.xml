@@ -5,26 +5,14 @@
 	<parent>
 		<groupId>com.microservices</groupId>
 		<artifactId>medflow-nexus</artifactId>
-		<version>0.0.1-SNAPSHOT</version><!-- lookup parent from repository -->
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.microservices</groupId>
 	<artifactId>appointment-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<name>appointment-service</name>
+	<description>Appointment Management Service</description>
+
 	<properties>
 		<java.version>17</java.version>
 		<spring-cloud.version>2025.1.1</spring-cloud.version>
@@ -34,6 +22,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -75,6 +67,25 @@
 			<artifactId>resilience4j-spring-boot3</artifactId>
 		</dependency>
 
+		<!-- JWT -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.5</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Utilities -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -95,6 +106,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
